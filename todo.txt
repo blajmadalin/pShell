@@ -24,8 +24,10 @@ To do:
 
     make cmd_cat command - done
 
-    make cmd_touch
+    make cmd_touch - done
 
-    error for cd "-." (example)
+    make cmd_remove 
+
+    error for cd "-." (example) - done
     
     

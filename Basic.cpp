@@ -6,8 +6,10 @@
 #include <unistd.h> // for chdir
 #include <sstream>
 #include <fstream>
+
 std::string prev_dir;
 namespace fs = std::filesystem;
+
 void cmd_exit() { exit(0); }
 
 void cmd_help() { std::cout << "Available commands are: help, cd, ls, pwd, exit\n"; }
@@ -23,24 +25,23 @@ void cmd_cd(std::string &path){
 
     if(path.empty() || path[0] =='~'){ //if empty, go back
         const char* home = getenv("HOME");
-//hello worlddd
 
         if(!home){
             std::cerr<<"cd: HOME environment variable not set\n";
             return;
         }
         path =std::string(home); 
-        //std::cout<<path << '\n';
+        //std::cout<<path << '\n';   -- for testing
     }
-    else if(path[0] == '-' ){ //go to previous directory
+    else if(path == "-" ){ //go to previous directory
 
         if(prev_dir.empty()){
-            std::cerr<<"cd: no previous directory";
+            std::cerr<<"cd: no previous directory \n";
             return;
         }
         path = prev_dir;
     }
-    else if(path[0] == '.' && path[1] == '.'){
+    else if(path == ".."){
         chdir("..");
         return;
     }
@@ -101,7 +102,17 @@ void cmd_cat(std::string arg){
     }
 }
 
-void cmd_touch(std::string arg){}
+void cmd_touch(std::string arg){
+    std::ifstream file(arg);
+    
+    if(file.good()){
+        std::cout << "File already exists \n";
+        return;
+    }
+    
+    std::ofstream newFile(arg);
+
+}
 
 int main() {
     std::unordered_map<std::string, std::function<void()>> no_args_command = {
@@ -114,7 +125,8 @@ int main() {
     std::unordered_map<std::string, std::function <void(std::string&)>> args_command ={
         {"cd", cmd_cd},
         {"echo", cmd_echo},
-        {"cat", cmd_cat}
+        {"cat", cmd_cat},
+        {"touch", cmd_touch}
     };
 
     while (true) {
@@ -129,17 +141,17 @@ int main() {
         iss >> command;
         std:getline(iss >> std::ws, arg);
 
-
         if(no_args_command.find(command) != no_args_command.end()){
             if(!arg.empty()) std::cerr<<"This command does not take arguments \n";
             else no_args_command[command]();
         }
+
         else if(args_command.find(command) != args_command.end()){
             args_command[command](arg);
         }
-        else{
-            std::cerr<<"shell: Unknown command f" <<" '"<<command<<"'\n";
 
+        else{
+            std::cerr<<"shell: Unknown command: " <<" '"<<command<<"'\n";
         } 
     }
     return 0;
