@@ -1,0 +1,18 @@
+To do:
+    implement path in terminal - done
+    use something else instead of unordered map - done
+    use another unordered map for functions with arguments; - done
+    make cmd_cd (changedir) - 
+        - if no arg, go back home - done
+        - else change current dir- done
+            -use current path when changing dir -done
+        - cd -    = done
+        - cd root - done
+        - cd ~ - done
+        - cd ..  - done
+        - error for "-." (example)
+
+    make cmd_ls
+        -lists all directories in path
+    
+    push to github
