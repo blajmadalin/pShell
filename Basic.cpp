@@ -12,7 +12,32 @@ namespace fs = std::filesystem;
 
 void cmd_exit() { exit(0); }
 
-void cmd_help() { std::cout << "Available commands are: help, cd, ls, pwd, exit\n"; }
+void cmd_help(std::string arg) {
+    std::unordered_map<std::string, std::string> commands = {
+        {"help", "Help is here to help you learn how pShell works. \n"},
+        {"cd", " "},
+        {"pwd", "Outputs the current directory \n"},
+        {"echo", "echo prints whatever the user has typed after space. \n"},
+        {"ls", "ls lists all the files in the current directory. \n"},
+        {"cat", "cat outputs the contents of a file. \n"},
+        {"touch", "touch checks whether the file you tried to create exists and creates it if not. \n"},
+        {"rm", "rm deletes the file the user has specified.\n"}
+    };
+
+    if(arg.empty()){
+        std::cout<<"Available commands are: ";
+        for(const auto& [commands, description] : commands){
+            std::cout << commands << ", ";
+        }
+        std::cout << '\n';
+        return;
+    }
+    if(commands.find(arg) != commands.end()){
+        std::cout<<commands[arg];
+    }
+    
+
+}
 
 void cmd_cd(std::string &path){
 
@@ -125,7 +150,6 @@ void cmd_rm(std::string arg){ //function to remove files
 int main() {
     std::unordered_map<std::string, std::function<void()>> no_args_command = {
         {"exit", cmd_exit},
-        {"help", cmd_help},
         {"ls", cmd_ls},
         {"pwd", cmd_pwd}
     };
@@ -135,7 +159,8 @@ int main() {
         {"echo", cmd_echo},
         {"cat", cmd_cat},
         {"touch", cmd_touch},
-        {"rm", cmd_rm}
+        {"rm", cmd_rm},
+        {"help", cmd_help}
     };
 
     while (true) {
