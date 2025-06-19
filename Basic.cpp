@@ -22,7 +22,8 @@ void cmd_cd(std::string &path){
 
     if(path.empty() || path[0] =='~'){ //if empty, go back
         const char* home = getenv("HOME");
-//hello
+//hello worlddd
+
         if(!home){
             std::cerr<<"cd: HOME environment variable not set\n";
             return;
