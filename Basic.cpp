@@ -8,7 +8,7 @@
 
 void cmd_exit() { exit(0); }
 
-void cmd_help() { std::cout << "Available commands are: help, cd, ls, exit\n"; }
+void cmd_help() { std::cout << "Available commands are: help, cd, ls, pwd, exit\n"; }
 
 std::string prev_dir;
 void cmd_cd(std::string &path){
@@ -78,15 +78,28 @@ void cmd_ls(){
 
 }
 
+void cmd_pwd(){
+    char cwd[PATH_MAX];
+    getcwd(cwd, sizeof(cwd));
+    std::cout << cwd << std::endl;
+    return;
+}
+
+void cmd_echo(std::string arg){
+    std::cout<< arg << '\n';
+}
+
 int main() {
     std::unordered_map<std::string, std::function<void()>> no_args_command = {
         {"exit", cmd_exit},
         {"help", cmd_help},
-        {"ls", cmd_ls}
+        {"ls", cmd_ls},
+        {"pwd", cmd_pwd}
     };
 
     std::unordered_map<std::string, std::function <void(std::string&)>> args_command ={
-        {"cd", cmd_cd}
+        {"cd", cmd_cd},
+        {"echo", cmd_echo}
     };
 
     while (true) {
@@ -98,7 +111,8 @@ int main() {
         std::getline(std::cin, line);
         std::istringstream iss(line);
         std::string command, arg;
-        iss >> command >> arg;
+        iss >> command;
+        std:getline(iss >> std::ws, arg);
 
 
         if(no_args_command.find(command) != no_args_command.end()){

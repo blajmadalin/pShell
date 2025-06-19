@@ -10,9 +10,22 @@ To do:
         - cd root - done
         - cd ~ - done
         - cd ..  - done
-        - error for "-." (example)
+        
 
-    make cmd_ls
-        -lists all directories in path
-    
+    make cmd_ls -done
+        -lists all directories in path -done 
+
+    make cmd_pwd - done 
+
     push to github - done 
+
+    make cmd_echo - done
+        take the entire line as arg 
+
+    make cmd_cat command
+
+    make cmd_touch
+
+    error for cd "-." (example)
+    
+    
