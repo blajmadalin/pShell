@@ -26,8 +26,11 @@ To do:
 
     make cmd_touch - done
 
-    make cmd_remove 
-
     error for cd "-." (example) - done
     
+    make cmd_remove - done
+
+    add about functions (like man)
+
+    comment everything
     

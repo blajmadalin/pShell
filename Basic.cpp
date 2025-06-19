@@ -102,16 +102,24 @@ void cmd_cat(std::string arg){
     }
 }
 
-void cmd_touch(std::string arg){
-    std::ifstream file(arg);
+void cmd_touch(std::string arg){ //function to create files or to check whether if it already exists
+    std::ifstream file(arg); //getting the file with the same name, if it exists
     
     if(file.good()){
-        std::cout << "File already exists \n";
+        std::cout << "File already exists \n"; //file.good() returns true if the file already exists
         return;
     }
     
-    std::ofstream newFile(arg);
+    std::ofstream newFile(arg); //if the file doesen't exist, it gets created
 
+}
+
+void cmd_rm(std::string arg){ //function to remove files
+    if(std::remove(arg.c_str()) == 0){ //if output of std::remove is 0, that means that the file was removed succesfully
+        std::cout<<"File deleted succesfully \n";
+        return;
+    }
+    std::cerr << "rm: file does not exist \n"; //if the output was not 0, it failed
 }
 
 int main() {
@@ -126,7 +134,8 @@ int main() {
         {"cd", cmd_cd},
         {"echo", cmd_echo},
         {"cat", cmd_cat},
-        {"touch", cmd_touch}
+        {"touch", cmd_touch},
+        {"rm", cmd_rm}
     };
 
     while (true) {
