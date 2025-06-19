@@ -30,7 +30,16 @@ To do:
     
     make cmd_remove - done
 
-    add about functions (like man)
+    add about functions (like man) - done
 
-    comment everything
+    comment everything - done
+        exit - done   
+        help - done
+        cd - done
+        ls - done
+        pwd - done
+        echo - done
+        cat - done
+        touch - done
+        rm - done
     

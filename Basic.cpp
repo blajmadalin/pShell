@@ -10,10 +10,10 @@
 std::string prev_dir;
 namespace fs = std::filesystem;
 
-void cmd_exit() { exit(0); }
+void cmd_exit() { exit(0); } //closes program
 
 void cmd_help(std::string arg) {
-    std::unordered_map<std::string, std::string> commands = {
+    std::unordered_map<std::string, std::string> commands = { //defining map containing commands and their respective description
         {"help", "Help is here to help you learn how pShell works. \n"},
         {"cd", " "},
         {"pwd", "Outputs the current directory \n"},
@@ -24,7 +24,7 @@ void cmd_help(std::string arg) {
         {"rm", "rm deletes the file the user has specified.\n"}
     };
 
-    if(arg.empty()){
+    if(arg.empty()){ // if no argument, we output the available commands
         std::cout<<"Available commands are: ";
         for(const auto& [commands, description] : commands){
             std::cout << commands << ", ";
@@ -32,7 +32,8 @@ void cmd_help(std::string arg) {
         std::cout << '\n';
         return;
     }
-    if(commands.find(arg) != commands.end()){
+
+    if(commands.find(arg) != commands.end()){ //else we output the description for that specific command
         std::cout<<commands[arg];
     }
     
@@ -42,16 +43,16 @@ void cmd_help(std::string arg) {
 void cmd_cd(std::string &path){
 
     char cwd[PATH_MAX];
-    if (!getcwd(cwd, sizeof(cwd))) {
+    if (!getcwd(cwd, sizeof(cwd))) { //directory error
         perror("getcwd");
         return;
     }
     std::string current_dir = cwd;
 
-    if(path.empty() || path[0] =='~'){ //if empty, go back
+    if(path.empty() || path[0] =='~'){ //if only cd, or cd~, current directory is set to home
         const char* home = getenv("HOME");
 
-        if(!home){
+        if(!home){ //home directory error
             std::cerr<<"cd: HOME environment variable not set\n";
             return;
         }
@@ -66,11 +67,11 @@ void cmd_cd(std::string &path){
         }
         path = prev_dir;
     }
-    else if(path == ".."){
+    else if(path == ".."){ // goes up a directory
         chdir("..");
         return;
     }
-    else if(path[0] != '/'){
+    else if(path[0] != '/'){ //changes to root directory
         char cwd[PATH_MAX];
         if (getcwd(cwd, sizeof(cwd)) != nullptr) {
             path = std::string(cwd) + "/" + path;
@@ -91,12 +92,12 @@ void cmd_cd(std::string &path){
 
 void cmd_ls(){
     char cwd[PATH_MAX];
-    if (!getcwd(cwd, sizeof(cwd))) {
+    if (!getcwd(cwd, sizeof(cwd))) { //dir error
             perror("getcwd");
             return;
         }
     std::string path = cwd;
-    for(const auto entry : fs::directory_iterator(path)){
+    for(const auto entry : fs::directory_iterator(path)){ //iterating through all the files in the directory and printing their name out
         std::cout<< entry.path().filename() << " ";
     }
     std::cout <<'\n';
@@ -106,24 +107,28 @@ void cmd_ls(){
 
 void cmd_pwd(){
     char cwd[PATH_MAX];
-    getcwd(cwd, sizeof(cwd));
-    std::cout << cwd << std::endl;
+    if (!getcwd(cwd, sizeof(cwd))) { //directory error
+        perror("getcwd");
+        return;
+    }
+    std::cout << cwd << std::endl; //prints out the current directory
     return;
 }
 
 void cmd_echo(std::string arg){
-    std::cout<< arg << '\n';
+    std::cout<< arg << '\n'; //prints the string typed by user
 }
 
 void cmd_cat(std::string arg){
     std::ifstream file(arg);
 
-    if(!file){
-        std::cerr<<"cat: cannot open file \n";
+    if(!file){ //checks if file is working properly 
+        std::cerr<<"cat: cannot open file \n"; 
     }
+    
     std::string line;
     while(std::getline(file, line)){
-        std::cout<<line<<'\n';
+        std::cout<<line<<'\n'; //outputs the content of the file
     }
 }
 
