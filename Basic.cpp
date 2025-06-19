@@ -5,12 +5,13 @@
 #include <linux/limits.h> // for PATH_MAX
 #include <unistd.h> // for chdir
 #include <sstream>
-
+#include <fstream>
+std::string prev_dir;
+namespace fs = std::filesystem;
 void cmd_exit() { exit(0); }
 
 void cmd_help() { std::cout << "Available commands are: help, cd, ls, pwd, exit\n"; }
 
-std::string prev_dir;
 void cmd_cd(std::string &path){
 
     char cwd[PATH_MAX];
@@ -62,7 +63,6 @@ void cmd_cd(std::string &path){
     prev_dir = current_dir;
 }
 
-namespace fs = std::filesystem;
 void cmd_ls(){
     char cwd[PATH_MAX];
     if (!getcwd(cwd, sizeof(cwd))) {
@@ -89,6 +89,20 @@ void cmd_echo(std::string arg){
     std::cout<< arg << '\n';
 }
 
+void cmd_cat(std::string arg){
+    std::ifstream file(arg);
+
+    if(!file){
+        std::cerr<<"cat: cannot open file \n";
+    }
+    std::string line;
+    while(std::getline(file, line)){
+        std::cout<<line<<'\n';
+    }
+}
+
+void cmd_touch(std::string arg){}
+
 int main() {
     std::unordered_map<std::string, std::function<void()>> no_args_command = {
         {"exit", cmd_exit},
@@ -99,7 +113,8 @@ int main() {
 
     std::unordered_map<std::string, std::function <void(std::string&)>> args_command ={
         {"cd", cmd_cd},
-        {"echo", cmd_echo}
+        {"echo", cmd_echo},
+        {"cat", cmd_cat}
     };
 
     while (true) {

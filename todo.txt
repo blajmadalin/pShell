@@ -20,9 +20,9 @@ To do:
     push to github - done 
 
     make cmd_echo - done
-        take the entire line as arg 
+        take the entire line as arg - done
 
-    make cmd_cat command
+    make cmd_cat command - done
 
     make cmd_touch
 
