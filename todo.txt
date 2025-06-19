@@ -15,4 +15,4 @@ To do:
     make cmd_ls
         -lists all directories in path
     
-    push to github
+    push to github - done 

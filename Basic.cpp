@@ -8,7 +8,7 @@
 
 void cmd_exit() { exit(0); }
 
-void cmd_help() { std::cout << "Available commands are: help, cd, exit\n"; }
+void cmd_help() { std::cout << "Available commands are: help, cd, ls, exit\n"; }
 
 std::string prev_dir;
 void cmd_cd(std::string &path){
@@ -62,10 +62,27 @@ void cmd_cd(std::string &path){
     prev_dir = current_dir;
 }
 
+namespace fs = std::filesystem;
+void cmd_ls(){
+    char cwd[PATH_MAX];
+    if (!getcwd(cwd, sizeof(cwd))) {
+            perror("getcwd");
+            return;
+        }
+    std::string path = cwd;
+    for(const auto entry : fs::directory_iterator(path)){
+        std::cout<< entry.path().filename() << " ";
+    }
+    std::cout <<'\n';
+    return;
+
+}
+
 int main() {
     std::unordered_map<std::string, std::function<void()>> no_args_command = {
         {"exit", cmd_exit},
-        {"help", cmd_help}
+        {"help", cmd_help},
+        {"ls", cmd_ls}
     };
 
     std::unordered_map<std::string, std::function <void(std::string&)>> args_command ={
